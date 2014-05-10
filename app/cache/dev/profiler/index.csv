@@ -17,3 +17,5 @@ adfe3d,127.0.0.1,POST,http://localhost/symfony2test/web/app_dev.php/_configurato
 6bdf1b,127.0.0.1,POST,http://localhost/symfony2test/web/app_dev.php/_configurator/step/1,1399650449,
 30ff50,127.0.0.1,GET,http://localhost/symfony2test/web/app_dev.php/_configurator/final,1399650450,
 42545c,127.0.0.1,GET,http://localhost/symfony2test/web/app_dev.php/,1399650459,
+df151a,127.0.0.1,GET,http://localhost/symfony2test/web/app_dev.php/,1399730437,
+13abd8,127.0.0.1,GET,http://localhost/symfony2test/web/app_dev.php/product/new,1399730455,

@@ -208,6 +208,66 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        if (0 === strpos($pathinfo, '/product')) {
+            // product
+            if (rtrim($pathinfo, '/') === '/product') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'product');
+                }
+
+                return array (  '_controller' => 'Acme\\DemoBundle\\Controller\\ProductController::indexAction',  '_route' => 'product',);
+            }
+
+            // product_show
+            if (preg_match('#^/product/(?P<id>[^/]++)/show$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'product_show')), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\ProductController::showAction',));
+            }
+
+            // product_new
+            if ($pathinfo === '/product/new') {
+                return array (  '_controller' => 'Acme\\DemoBundle\\Controller\\ProductController::newAction',  '_route' => 'product_new',);
+            }
+
+            // product_create
+            if ($pathinfo === '/product/create') {
+                if ($this->context->getMethod() != 'POST') {
+                    $allow[] = 'POST';
+                    goto not_product_create;
+                }
+
+                return array (  '_controller' => 'Acme\\DemoBundle\\Controller\\ProductController::createAction',  '_route' => 'product_create',);
+            }
+            not_product_create:
+
+            // product_edit
+            if (preg_match('#^/product/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'product_edit')), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\ProductController::editAction',));
+            }
+
+            // product_update
+            if (preg_match('#^/product/(?P<id>[^/]++)/update$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('POST', 'PUT'))) {
+                    $allow = array_merge($allow, array('POST', 'PUT'));
+                    goto not_product_update;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'product_update')), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\ProductController::updateAction',));
+            }
+            not_product_update:
+
+            // product_delete
+            if (preg_match('#^/product/(?P<id>[^/]++)/delete$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('POST', 'DELETE'))) {
+                    $allow = array_merge($allow, array('POST', 'DELETE'));
+                    goto not_product_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'product_delete')), array (  '_controller' => 'Acme\\DemoBundle\\Controller\\ProductController::deleteAction',));
+            }
+            not_product_delete:
+
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }
